@@ -8,34 +8,34 @@ function [Answer,Answer0,Cancelled]=IN_Hopf(varargin)
 if nargin==1
     Answer0=varargin{1};
     if strcmp(Answer0.ObsCh{1},'FC')
-        Answer0.ObsCh{1}='FC prom con Fisher';
+        Answer0.ObsCh{1}='FC avg with Fisher';
     end
         
     
     if ~isfile(Answer0.TSDir)
     [pathStr, name, ext] = fileparts(Answer0.TSDir)
     Answer0.TSDir=strcat(pwd,'\Medidas\',name,ext);
-    fprintf('TRATASTE DE CARGAR UN DEFAULT QUE NO EXISTE, usando path local /medidas')
+    fprintf('Default TS path non existant, using local /Medidas')
     %Answer0.TSCh{1}='TS_W';
     end
     
     if ~isfile(Answer0.SCDir)
     [pathStr, name, ext] = fileparts(Answer0.SCDir)
     Answer0.SCDir=strcat(pwd,'\Medidas\',name,ext);
-    fprintf('TRATASTE DE CARGAR UN DEFAULT QUE NO EXISTE, usando path local /medidas')
+    fprintf('Default SC path non existant, using local /medidas')
     %Answer0.SCCh{1}='SC';
     end
     
     if ~isfile(Answer0.GroupDir)
     [pathStr, name, ext] = fileparts(Answer0.GroupDir)
     Answer0.GroupDir=strcat(pwd,'\',name,ext);
-    fprintf('TRATASTE DE CARGAR UN DEFAULT QUE NO EXISTE, usando path local ')
+    fprintf('Default group path non existant, using local /')
     %Answer0.GroupCh{1}=Rsn(original);
     end
     
     clear pathStr name ext
 end
-Title = 'INPUTSDLG Demo Dialog';
+Title = 'INPUTSDLG Dialog';
 
 %%%% SETTING DIALOG OPTIONS
 % Options.WindowStyle = 'modal';
@@ -65,7 +65,7 @@ DefAns = struct([]);
 % Formats(1,2).size = [-1 0];
 % Formats(1,2).span = [1 2]; % item is 1 field x 4 fields
 
-Prompt(end+1,:) = {'Nombre carpeta', 'saveFile',[]};
+Prompt(end+1,:) = {'Sim Folder name', 'saveFile',[]};
 Formats(1,3).type = 'edit';
 Formats(1,3).format = 'text';
 Formats(1,3).size = 100; % automatically assign the height
@@ -76,25 +76,25 @@ DefAns(1).saveFile = 'SimulTest';
 % Formats(2,1).size = [-1 0];
 % Formats(2,1).span = [1 1]; % item is 1 field x 4 fields
 
-Prompt(end+1,:) = {'Cargar tseries.mat','',''};
+Prompt(end+1,:) = {'Load  tseries .mat','',''};
 Formats(2,2).type = 'button';
 Formats(2,2).size = [150 40]; % Tamaño
 %Formats(2,1).callback = @(~,~,handles,k)msgbox(sprintf('You just pressed %s button',get(handles(k),'String')),'modal');
 Formats(2,2).callback = @(~,~,h,k)dataload(h,k);
  
 
-Prompt(end+1,:) = {'Elegir tseries:','TSCh',[]};
+Prompt(end+1,:) = {'Pick tseries:','TSCh',[]};
 Formats(2,3).labelloc = 'leftmiddle';
 Formats(2,3).type = 'list';
 Formats(2,3).style = 'list';
 Formats(2,3).format = 'text'; % Answer will give value shown in items, disable to get integer
-Formats(2,3).items = {'TS_W' ; 'No hay nada cargado'};
+Formats(2,3).items = { 'Nothing Loaded'};
 Formats(2,3).limits = [1 1]; % multi-select
 Formats(2,3).size = size_control;
-DefAns.TSCh = {'No hay nada cargado'};
+DefAns.TSCh = {'Nothing Loaded'};
 
 
-Prompt(end+1,:) = {'Directorio de tseries','TSDir',[]};
+Prompt(end+1,:) = {'tseries Dir','TSDir',[]};
 Formats(2,4).labelloc = 'topcenter';
 Formats(2,4).type = 'edit';
 Formats(2,4).format = 'text';
@@ -103,7 +103,7 @@ Formats(2,4).span = [1 1];  % item is 1 field x 3 fields
 DefAns.TSDir = pwd;
 
 
-Prompt(end+1,:) = {'Tiempo de muestreo', 'TRsec',[]};
+Prompt(end+1,:) = {'Sample period', 'TRsec',[]};
 Formats(2,5).labelloc = 'topcenter';
 Formats(2,5).type = 'edit';
 Formats(2,5).format = 'float';
@@ -124,7 +124,7 @@ DefAns.EnableSacawign = false;
 % Formats(3,1).size = [-1 0];
 % Formats(3,1).span = [1 1]; % item is 1 field x 4 fields
 
-Prompt(end+1,:) = {'Cargar SC.mat','',''};
+Prompt(end+1,:) = {'Load SC .mat','',''};
 Formats(3,2).type = 'button';
 Formats(3,2).size = [150 40]; % Tamaño
 %Formats(5,1).callback = @(~,~,handles,k)msgbox(sprintf('You just pressed %s button',get(handles(k),'String')),'modal');
@@ -132,18 +132,18 @@ Formats(3,2).callback = @(~,~,h,k)dataload(h,k);
 
 
 
-Prompt(end+1,:) = {'Elegir SC:','SCCh',[]};
+Prompt(end+1,:) = {'Pick SC:','SCCh',[]};
 Formats(3,3).labelloc = 'leftmiddle';
 Formats(3,3).type = 'list';
 Formats(3,3).style = 'list';
 Formats(3,3).format = 'text'; % Answer will give value shown in items, disable to get integer
-Formats(3,3).items = {'SC','No hay nada cargado'};
+Formats(3,3).items = {'Nothing Loaded'};
 Formats(3,3).limits = [1 1]; % multi-select
 Formats(3,3).size =  size_control;
-DefAns.SCCh = {'No hay nada cargado'};
+DefAns.SCCh = {'Nothing Loaded'};
 
 
-Prompt(end+1,:) = {'Directorio de SC','SCDir',[]};
+Prompt(end+1,:) = {'SC Dir','SCDir',[]};
 Formats(3,4).labelloc = 'topcenter';
 Formats(3,4).type = 'edit';
 Formats(3,4).format = 'text';
@@ -165,24 +165,24 @@ DefAns.EnableContradiagMode = false;
 % Formats(4,1).span = [1 1]; % item is 1 field x 4 fields
 % 
 
-Prompt(end+1,:) = {'Cargar grouping.mat','',''};
+Prompt(end+1,:) = {'Load grouping.mat','',''};
 Formats(4,2).type = 'button';
 Formats(4,2).size = [150 40]; % Tamaño
 %Formats(2,1).callback = @(~,~,handles,k)msgbox(sprintf('You just pressed %s button',get(handles(k),'String')),'modal');
 Formats(4,2).callback = @(~,~,h,k)groupload(h,k);
 
 
-Prompt(end+1,:) = {'Elegir groupings:','GroupCh',[]};
+Prompt(end+1,:) = {'Pick groupings:','GroupCh',[]};
 Formats(4,3).labelloc = 'leftmiddle';
 Formats(4,3).type = 'list';
 Formats(4,3).style = 'list';
 Formats(4,3).format = 'text'; % Answer will give value shown in items, disable to get integer
-Formats(4,3).items = {'Rsn(original)' ; 'No hay nada cargado'};
+Formats(4,3).items = { 'Nothing Loaded'};
 Formats(4,3).limits = [1 1]; % multi-select
 Formats(4,3).size =  size_control;
-DefAns.GroupCh = {'No hay nada cargado'};
+DefAns.GroupCh = {'Nothing Loaded'};
 % 
-Prompt(end+1,:) = {'Directorio de grouping','GroupDir',[]};
+Prompt(end+1,:) = {'Grouping Dir','GroupDir',[]};
 Formats(4,4).labelloc = 'topcenter';
 Formats(4,4).type = 'edit';
 Formats(4,4).format = 'text';
@@ -190,7 +190,7 @@ Formats(4,4).size = [-1 0];
 Formats(4,4).span = [1 1];  % item is 1 field x 3 fields
 DefAns.GroupDir = pwd;
 
-Prompt(end+1,:) = {'Cortar cada TS a...', 'Tmax','(0: max)'};
+Prompt(end+1,:) = {'Shorten TS to...', 'Tmax','(0: max)'};
 Formats(4,5).labelloc = 'topcenter';
 Formats(4,5).type = 'edit';
 Formats(4,5).format = 'integer';
@@ -200,7 +200,7 @@ Formats(4,5).unitsloc = 'bottomleft';
 DefAns.Tmax = 200;
 
 
-Prompt(end+1,:) = {'Simular hasta Tmax...', 'Tsim','(0: igual a TSlong)'};
+Prompt(end+1,:) = {' MaxSamples to sim...', 'Tsim','(0: concatenate ts)'};
 Formats(4,6).labelloc = 'topcenter';
 Formats(4,6).type = 'edit';
 Formats(4,6).format = 'integer';
@@ -216,23 +216,23 @@ DefAns.Tsim = 0;
 % Formats(5,1).span = [1 1]; % item is 1 field x 4 fields
 % 
 
-Prompt(end+1,:) = {'Selección de observable:','ObsCh',[]};
+Prompt(end+1,:) = {'Pick Obs:','ObsCh',[]};
 Formats(5,2).labelloc = 'topcenter';
 Formats(5,2).type = 'list';
 Formats(5,2).style = 'list';
 Formats(5,2).format = 'text'; % Answer will give value shown in items, disable to get integer
-Formats(5,2).items = {'FC prom con Fisher';'FC por suj';'FCD concat';'FCD mean';'FCD por suj';'Ventana de FCD';'FMI';'GAMMA'};
+Formats(5,2).items = {'FC avg with Fisher'};
 Formats(5,2).limits = [1 1]; % multi-select
 Formats(5,2).size =  size_control_short;
-DefAns.ObsCh = {'FC prom con Fisher'};
+DefAns.ObsCh = {'FC avg with Fisher'};
 
 
-Prompt(end+1,:) = {'Selección de métrica:','MetCh',[]};
+Prompt(end+1,:) = {'Pick metric:','MetCh',[]};
 Formats(5,3).labelloc = 'topcenter';
 Formats(5,3).type = 'list';
 Formats(5,3).style = 'list';
 Formats(5,3).format = 'text'; % Answer will give value shown in items, disable to get integer
-Formats(5,3).items = {'1-SSIM';'Frobenius';'Kolmogorov-Smirnov'};
+Formats(5,3).items = {'1-SSIM';'Frobenius';};
 Formats(5,3).limits = [1 1]; % multi-select
 Formats(5,3).size =  size_control_short;
 DefAns.MetCh = {'1-SSIM'};
@@ -244,7 +244,7 @@ Formats(5,4).type = 'check';
 DefAns.EnableFilterMode = true;
 
 
-Prompt(end+1,:) = {'Frecuencia inf. de pasabanda', 'BPlb',[]};
+Prompt(end+1,:) = {'BW lower freq', 'BPlb',[]};
 Formats(5,5).labelloc = 'topcenter';
 Formats(5,5).type = 'edit';
 Formats(5,5).format = 'float';
@@ -253,7 +253,7 @@ Formats(5,5).limits = [0 inf] ;% non-negative decimal number
 DefAns.BPlb = 0.04;
 
 
-Prompt(end+1,:) = {'Frecuencia sup. de pasabanda', 'BPub',[]};
+Prompt(end+1,:) = {'BW higher freq', 'BPub',[]};
 Formats(5,6).labelloc = 'topcenter';
 Formats(5,6).type = 'edit';
 Formats(5,6).format = 'float';
@@ -268,7 +268,7 @@ DefAns.BPub = 0.07;
 % Formats(6,1).span = [1 1]; % item is 1 field x 4 fields
 
 
-Prompt(end+1,:) = {'N por generación', 'N','(# entero)'};
+Prompt(end+1,:) = {'N per generation', 'N','(# entero)'};
 Formats(6,2).labelloc = 'topcenter';
 Formats(6,2).type = 'edit';
 Formats(6,2).format = 'integer';
@@ -278,17 +278,17 @@ Formats(6,2).unitsloc = 'bottomleft';
 DefAns.N = 10;
 
 
-Prompt(end+1,:) = {'Generaciones máximas', 'Gens','(# entero)'};
+Prompt(end+1,:) = {'Max Gens.', 'Gens','(# entero)'};
 Formats(6,3).labelloc = 'topcenter';
 Formats(6,3).type = 'edit';
 Formats(6,3).format = 'integer';
 Formats(6,3).limits = [1 999999999]; % 9-digits (positive #)
 Formats(6,3).size = 80;
 Formats(6,3).unitsloc = 'bottomleft';
-DefAns.Gens = 100;
+DefAns.Gens = 200;
 
 
-Prompt(end+1,:) = {'Cantidad de simulaciones', 'Repe','(# entero)'};
+Prompt(end+1,:) = {'Max Repeat', 'Repe','(# entero)'};
 Formats(6,4).labelloc = 'topcenter';
 Formats(6,4).type = 'edit';
 Formats(6,4).format = 'integer';
@@ -321,20 +321,20 @@ DefAns.EnableVectorizeMode = true;
 % Formats(7,1).span = [1 1]; % item is 1 field x 4 fields
 % 
 
-Prompt(end+1,:) = {'Selección de parcelamiento:','ParcellCh',[]};
+Prompt(end+1,:) = {'Parcelling par. choice:','ParcellCh',[]};
 Formats(7,2).labelloc = 'topcenter';
 Formats(7,2).type = 'list';
 Formats(7,2).style = 'list';
 Formats(7,2).format = 'text'; % Answer will give value shown in items, disable to get integer
-Formats(7,2).items = {'aes por grupo, G=G_Ini','aes por grupo, G homog','a por grupo, G por grupo','a homog, G por grupo'};
+Formats(7,2).items = {'a per group, G=G_Ini','a per group, G homog','a per group, G per group','a homog, G per grupo'};
 Formats(7,2).limits = [1 1]; % multi-select
 Formats(7,2).size =  size_control;
-DefAns.ParcellCh = {'aes por grupo, G=G_Ini'};
+DefAns.ParcellCh = {'a per group, G=G_Ini'};
 Formats(7,2).callback = @(~,~,h,k)disableG(h,k);
 
 
 
-Prompt(end+1,:) = {'Límite inf. aes', 'aesLb',[]};
+Prompt(end+1,:) = {'Inf. limit a', 'aesLb',[]};
 Formats(7,3).labelloc = 'topcenter';
 Formats(7,3).type = 'edit';
 Formats(7,3).format = 'float';
@@ -343,7 +343,7 @@ Formats(7,3).limits = [-inf inf]; % non-negative decimal number
 DefAns.aesLb = -0.4;
 
 
-Prompt(end+1,:) = {'Límite sup. aes', 'aesUb',[]};
+Prompt(end+1,:) = {'Sup. limit a', 'aesUb',[]};
 Formats(7,4).labelloc = 'topcenter';
 Formats(7,4).type = 'edit';
 Formats(7,4).format = 'float';
@@ -352,7 +352,7 @@ Formats(7,4).limits = [-inf inf] ;% non-negative decimal number
 DefAns.aesUb = 0.4;
 
 
-Prompt(end+1,:) = {'Límite inf. Ges', 'GesLb',[]};
+Prompt(end+1,:) = {'Inf. limit G', 'GesLb',[]};
 Formats(7,5).labelloc = 'topcenter';
 Formats(7,5).type = 'edit';
 Formats(7,5).format = 'float';
@@ -361,7 +361,7 @@ Formats(7,5).limits = [-inf inf] ;% non-negative decimal number
 DefAns.GesLb = 0;
 
 
-Prompt(end+1,:) = {'Límite sup. Ges', 'GesUb',[]};
+Prompt(end+1,:) = {'Sup. limit G', 'GesUb',[]};
 Formats(7,6).labelloc = 'topcenter';
 Formats(7,6).type = 'edit';
 Formats(7,6).format = 'float';
@@ -370,7 +370,7 @@ Formats(7,6).limits = [-inf inf] ;% non-negative decimal number
 DefAns.GesUb = 3;
 
 
-Prompt(end+1,:) = {'Selección de a inicial:','aIni',[]};
+Prompt(end+1,:) = {'a Offset:','aIni',[]};
 Formats(8,2).labelloc = 'topcenter';
 Formats(8,2).type = 'list';
 Formats(8,2).style = 'list';
@@ -382,16 +382,16 @@ DefAns.aIni = {'rand(nNodes,1)'};
 Formats(8,2).callback = @(~,~,h,k)disableaIni(h,k);
 
 
-Prompt(end+1,:) = {'Amplitud aIni', 'aesIniAmp',[]};
+Prompt(end+1,:) = {'Amplitude a Off.', 'aesIniAmp',[]};
 Formats(8,3).labelloc = 'topcenter';
 Formats(8,3).type = 'edit';
 Formats(8,3).format = 'float';
 Formats(8,3).size = 80;
 Formats(8,3).limits = [-inf inf] ;% non-negative decimal number
-DefAns.aesIniAmp = 0;
+DefAns.aesIniAmp = 0.005;
 
 
-Prompt(end+1,:) = {'Selección de G inicial:','GIni',[]};
+Prompt(end+1,:) = {'G Offset:','GIni',[]};
 Formats(8,4).labelloc = 'topcenter';
 Formats(8,4).type = 'list';
 Formats(8,4).style = 'list';
@@ -399,11 +399,11 @@ Formats(8,4).format = 'text'; % Answer will give value shown in items, disable t
 Formats(8,4).items = {'zeros(nNodes,1)','rand(nNodes,1)','ones(nNodes,1)'};
 Formats(8,4).limits = [1 1]; % multi-select
 Formats(8,4).size =  size_control_short;
-DefAns.GIni = {'rand(nNodes,1)'};
+DefAns.GIni = {'ones(nNodes,1)'};
 Formats(8,4).callback = @(~,~,h,k)disableaIni(h,k);
 
 
-Prompt(end+1,:) = {'Amplitud G inicial', 'GIniAmp',[]};
+Prompt(end+1,:) = {'Amplitude G Off.', 'GIniAmp',[]};
 Formats(8,5).labelloc = 'topcenter';
 Formats(8,5).type = 'edit';
 Formats(8,5).format = 'float';
@@ -413,7 +413,7 @@ DefAns.GIniAmp = 0.5;
 
 
 
-Prompt(end+1,:) = {'Numero de runs por fitness', 'Prom',''};
+Prompt(end+1,:) = {'Nuber of runs per fitness', 'Prom',''};
 Formats(9,2).labelloc = 'topcenter';
 Formats(9,2).type = 'edit';
 Formats(9,2).format = 'integer';
@@ -423,7 +423,7 @@ Formats(9,2).unitsloc = 'bottomleft';
 DefAns.Prom = 1;
 
 
-Prompt(end+1,:) = {'Paso dt', 'dt',[]};
+Prompt(end+1,:) = {'Step dt', 'dt',[]};
 Formats(9,3).labelloc = 'topcenter';
 Formats(9,3).type = 'edit';
 Formats(9,3).format = 'float';
@@ -432,7 +432,7 @@ Formats(9,3).limits = [-inf inf] ;% non-negative decimal number
 DefAns.dt = 0.1;
 
 
-Prompt(end+1,:) = {'Enable permuta' 'EnablePermutaMode',[]};
+Prompt(end+1,:) = {'Enable permute' 'EnablePermutaMode',[]};
 Formats(9,4).labelloc = 'topcenter';
 Formats(9,4).type = 'check';
 DefAns.EnablePermutaMode = false;
@@ -469,7 +469,7 @@ Answer0=Answer;
 
 %{'FC prom en Fisher';'FC por suj';'FCD concat';'FCD por suj';'Ventana de FCD';'FMI'};
 switch Answer.ObsCh{1}
-    case 'FC prom con Fisher'
+    case 'FC avg with Fisher'
         Answer.fx_emp=@(tseries) observable_FC(tseries);
         Answer.fx_TS=@(tseries) obtain_TS_nochange(tseries);
         Answer.fx_obs=@(tseries) observable_FC(tseries);
@@ -517,13 +517,13 @@ end
 
 switch Answer.ParcellCh{1}
     
-    case 'aes por grupo, G=G_Ini'
+    case 'a per group, G=G_Ini'
         Answer.Parcell = 1;
-    case 'aes por grupo, G homog'
+    case 'a per group, G homog'
         Answer.Parcell = 2;
-    case 'a por grupo, G por grupo'
+    case 'a per group, G per group'
         Answer.Parcell = 3;
-    case 'a homog, G por grupo'
+    case 'a homog, G per grupo'
         Answer.Parcell = 4;
 end
 
